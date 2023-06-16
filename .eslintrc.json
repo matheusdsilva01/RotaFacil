@@ -11,7 +11,7 @@
       }
     },
   "extends": [
-      "plugin:@next/next/recommended", "next"
+      "plugin:@next/next/recommended"
   ],
 "parser": "@typescript-eslint/parser",
   "overrides": [],
