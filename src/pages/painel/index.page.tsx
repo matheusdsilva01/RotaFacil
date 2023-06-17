@@ -1,10 +1,7 @@
-import useLocalStorage from "@/hooks/useLocalStorage";
-import { UserType } from "@/types/users";
+import PainelLayout from "@/layouts/painel.layout";
 
 const Painel = () => {
-  const [user, setUser] = useLocalStorage<UserType>("user");
-  console.log(user);
-  return <div>Painel</div>;
+  return <PainelLayout />;
 };
 
 export default Painel;
