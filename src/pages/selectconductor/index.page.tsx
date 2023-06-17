@@ -1,48 +1,22 @@
-import React from "react";
+import { GetServerSideProps } from "next";
 
-import CardUser from "@/components/cardUser";
-import { Container, Typography, Box } from "@mui/material";
+import { api } from "@/api";
+import SelectconductorLayout from "@/layouts/selectconductor.layout";
+import { Conductor } from "@/types/users";
 
-const conductors = [
-  { name: "Emily Johnson", city: "Nova York" },
-  { name: "Liam Smith", city: "Los Angeles" },
-  { name: "Olivia Williams", city: "Chicago" },
-  { name: "Noah Brown", city: "Miami" },
-  { name: "Ava Davis", city: "San Francisco" }
-];
+interface selectConductorProps {
+  conductors: Conductor[];
+}
 
-const SelectConductor = () => {
-  function setConductor(name: string, city: string) {
-    console.log(name, city);
-  }
-  return (
-    <Container
-      maxWidth="xl"
-      sx={{ height: "calc(100vh - 100px)", boxShadow: 1, mt: 4 }}
-    >
-      <Typography fontSize={32} fontWeight="bold" ml={2}>
-        Selecione um condutor
-      </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          gap: "10px 20px",
-          mt: 4
-        }}
-      >
-        {conductors.map(({ name, city }) => (
-          <CardUser
-            key={name}
-            name={name}
-            city={city}
-            onClick={() => setConductor(name, city)}
-          />
-        ))}
-      </Box>
-    </Container>
-  );
+const SelectConductor = ({ conductors }: selectConductorProps) => {
+  return <SelectconductorLayout conductors={conductors} />;
+};
+
+export const getServerSideProps: GetServerSideProps<{
+  conductors: Conductor[];
+}> = async () => {
+  const response = await api.get("/condutor");
+  return { props: { conductors: response.data } };
 };
 
 export default SelectConductor;
