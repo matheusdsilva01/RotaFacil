@@ -1,33 +1,42 @@
 import { useState } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 
 import EditIcon from "@mui/icons-material/Edit";
-import { Grid, TextField, ButtonBase } from "@mui/material";
+import { Grid, TextField, ButtonBase, TextFieldProps } from "@mui/material";
 
-interface InputFormProps {
+type InputFormProps = {
   label: string;
   name: string;
   value: string;
-}
+} & TextFieldProps;
 
-const InputForm = ({ label, name, value }: InputFormProps) => {
-  const [disabled, setDisabled] = useState(true);
-
+const InputForm = ({ label, name, value, ...otherProps }: InputFormProps) => {
+  const {
+    control,
+    formState: { errors }
+  } = useFormContext();
   return (
     <Grid item xs={12} sm={6} sx={{ display: "flex" }}>
-      <TextField
-        variant="filled"
-        label={label}
+      <Controller
+        control={control}
         name={name}
         defaultValue={value}
-        disabled={disabled}
-        InputLabelProps={{ shrink: true }}
+        render={({ field }) => (
+          <TextField
+            {...otherProps}
+            {...field}
+            label={label}
+            variant="filled"
+            InputLabelProps={{ shrink: true }}
+          />
+        )}
       />
-      <ButtonBase
+      {/* <ButtonBase
         sx={{ m: "auto 0", ml: 2 }}
         onClick={() => setDisabled(oldValue => !oldValue)}
       >
         <EditIcon color="action" />
-      </ButtonBase>
+      </ButtonBase> */}
     </Grid>
   );
 };

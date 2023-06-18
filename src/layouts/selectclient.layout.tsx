@@ -1,15 +1,22 @@
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import CardUser from "@/components/cardUser";
+import Modal from "@/components/modal";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { Client } from "@/types/users";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 interface selectClientLayoutProps {
   clients: Client[];
 }
 const SelectclientLayout = ({ clients }: selectClientLayoutProps) => {
-  const router = useRouter();
+  const [modalState, setModalState] = useState(false);
   const [user, setUser] = useLocalStorage("user");
+  const router = useRouter();
+
+  function closeModal() {
+    setModalState(false);
+  }
 
   function setClient(id: number) {
     const client = clients.find(client => client.id === id);
@@ -45,6 +52,23 @@ const SelectclientLayout = ({ clients }: selectClientLayoutProps) => {
           />
         ))}
       </Box>
+      <Box sx={{ float: "right", p: "10px 5px", mt: 5 }}>
+        <Button
+          color="primary"
+          variant="contained"
+          sx={{ paddingY: 1, paddingX: 3, width: 208 }}
+          type="submit"
+          onClick={() => setModalState(true)}
+        >
+          Criar Condutor
+        </Button>
+      </Box>
+      <Modal
+        closeModal={closeModal}
+        modalState={modalState}
+        onSubmit={() => {}}
+        type="conductor"
+      />
     </Container>
   );
 };

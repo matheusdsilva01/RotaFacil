@@ -15,6 +15,7 @@ const ClienteComponent = ({ clientData }: { clientData: Client }) => {
     <Grid maxWidth="md" container rowSpacing={2}>
       <InputForm
         label="Número Documento"
+        disabled
         value={clientData.numeroDocumento}
         name="numeroDocumento"
       />
@@ -49,7 +50,7 @@ const CondutorComponent = ({ conductorData }: { conductorData: Conductor }) => {
       <InputForm
         label="Categoria Habilitação"
         value={conductorData.catergoriaHabilitacao}
-        name="categoriaHabilitacao"
+        name="catergoriaHabilitacao"
       />
       <InputForm
         label="Vencimento Habilitação"

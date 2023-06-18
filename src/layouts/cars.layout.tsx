@@ -25,7 +25,7 @@ const CarsLayout = ({ cars }: CarsLayoutProps) => {
       sx={{ minHeight: "calc(100vh - 100px)", boxShadow: 1, py: 2 }}
     >
       <Typography fontSize={32} fontWeight="bold" ml={2}>
-        Selecione um cliente
+        Edite ou adicione um carro:
       </Typography>
       <Box
         sx={{
