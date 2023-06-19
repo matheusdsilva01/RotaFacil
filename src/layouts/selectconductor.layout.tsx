@@ -5,6 +5,7 @@ import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { api } from "@/api";
 import CardUser from "@/components/cardUser";
 import Modal from "@/components/modal";
+import ModelFormConductor from "@/components/modelsForm/modelFormConductor";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { Conductor } from "@/types/users";
 import { Container, Typography, Box, Button } from "@mui/material";
@@ -85,8 +86,9 @@ const SelectconductorLayout = ({ conductors }: selectConductorLayoutProps) => {
           closeModal={closeModal}
           modalState={modalState}
           onSubmit={handleSubmit(onSubmit)}
-          type="conductor"
-        />
+        >
+          <ModelFormConductor />
+        </Modal>
       </FormProvider>
     </Container>
   );

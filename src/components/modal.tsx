@@ -1,18 +1,15 @@
-import { FormEvent } from "react";
+import { FormEvent, ReactNode } from "react";
 
 import { Box, Button, Grid, Modal as ModalWrapper } from "@mui/material";
-
-import ModelFormClient from "./modelsForm/modelFormClient";
-import ModelFormConductor from "./modelsForm/modelFormConductor";
 
 interface ModalProps {
   modalState: boolean;
   closeModal: () => void;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-  type: "client" | "conductor";
+  children: ReactNode;
 }
 
-const Modal = ({ modalState, closeModal, onSubmit, type }: ModalProps) => {
+const Modal = ({ modalState, closeModal, onSubmit, children }: ModalProps) => {
   return (
     <ModalWrapper
       onClose={closeModal}
@@ -60,7 +57,7 @@ const Modal = ({ modalState, closeModal, onSubmit, type }: ModalProps) => {
             }
           })}
         >
-          {type === "client" ? <ModelFormClient /> : <ModelFormConductor />}
+          {children}
         </Grid>
         <Button
           type="submit"

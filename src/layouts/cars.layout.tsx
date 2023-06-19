@@ -1,23 +1,37 @@
-import React from "react";
+import { useState } from "react";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
 
-import CardUser from "@/components/cardUser";
+import { api } from "@/api";
+import Modal from "@/components/modal";
+import ModelFormCar from "@/components/modelsForm/modelFormCar";
 import { Cars } from "@/types/cars";
 import { formatKilometer } from "@/util/formatKilometer";
 import {
-  Container,
-  Typography,
   Box,
+  Button,
   Card,
   CardContent,
-  Button,
-  Link
+  Container,
+  Typography
 } from "@mui/material";
 
 interface CarsLayoutProps {
   cars: Cars[];
 }
 const CarsLayout = ({ cars }: CarsLayoutProps) => {
-  console.log(cars);
+  const [modalState, setModalState] = useState(false);
+  const methods = useForm();
+  const { handleSubmit } = methods;
+
+  function closeModal() {
+    setModalState(false);
+  }
+
+  async function onSubmit(values: FieldValues) {
+    console.log(values);
+    const response = await api.post("/veiculo", values);
+    console.log(response);
+  }
 
   return (
     <Container
@@ -84,10 +98,20 @@ const CarsLayout = ({ cars }: CarsLayoutProps) => {
           color="primary"
           variant="contained"
           sx={{ paddingY: 1, paddingX: 3, width: 208 }}
+          onClick={() => setModalState(true)}
         >
           Adicionar veículo
         </Button>
       </Box>
+      <FormProvider {...methods}>
+        <Modal
+          closeModal={closeModal}
+          modalState={modalState}
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <ModelFormCar />
+        </Modal>
+      </FormProvider>
     </Container>
   );
 };

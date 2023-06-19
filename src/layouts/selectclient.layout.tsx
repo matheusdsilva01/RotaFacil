@@ -5,6 +5,7 @@ import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { api } from "@/api";
 import CardUser from "@/components/cardUser";
 import Modal from "@/components/modal";
+import ModelFormClient from "@/components/modelsForm/modelFormClient";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { Client } from "@/types/users";
 import { Box, Button, Container, Typography } from "@mui/material";
@@ -78,8 +79,9 @@ const SelectclientLayout = ({ clients }: selectClientLayoutProps) => {
           closeModal={closeModal}
           modalState={modalState}
           onSubmit={handleSubmit(onSubmit)}
-          type="client"
-        />
+        >
+          <ModelFormClient />
+        </Modal>
       </FormProvider>
     </Container>
   );
