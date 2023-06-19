@@ -1,32 +1,30 @@
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { TypeOptions, toast } from "react-toastify";
 
-import { api } from "@/api";
+import { api, fetcher } from "@/api";
 import FormPainel from "@/components/formPainel";
+import Loading from "@/components/loading";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { Client, Conductor, UserType } from "@/types/users";
 import { Box, Button, Container, Typography } from "@mui/material";
+import useSWR from "swr";
 
 type UserData = Client;
 
 const PainelLayout = () => {
-  const [userData, setUserData] = useState<UserData>();
   const [user, setUser] = useLocalStorage<UserType>("user");
   const methods = useForm();
   const { handleSubmit } = methods;
 
-  useEffect(() => {
-    (async () => {
-      const response = await api.get<UserData>(`/${user?.type}/${user?.id}`);
-      setUserData(response.data);
-    })();
-  }, []);
+  const { data: userData, isLoading } = useSWR<UserData>(
+    `/${user?.type}/${user?.id}`,
+    fetcher
+  );
 
-  // temporary loading
-  if (!userData || !user) {
-    return <></>;
+  if (isLoading || !user || !userData) {
+    return <Loading />;
   }
 
   const notify = (message: string, type?: TypeOptions) =>

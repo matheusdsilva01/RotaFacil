@@ -3,10 +3,10 @@ import React from "react";
 
 import { api } from "@/api";
 import CarsLayout from "@/layouts/cars.layout";
-import { Cars } from "@/types/cars";
+import { Car } from "@/types/cars";
 
 interface CarsProps {
-  cars: Cars[];
+  cars: Car[];
 }
 
 const Cars = ({ cars }: CarsProps) => {
@@ -14,7 +14,7 @@ const Cars = ({ cars }: CarsProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps<{
-  cars: Cars[];
+  cars: Car[];
 }> = async () => {
   const response = await api.get("/veiculo");
 

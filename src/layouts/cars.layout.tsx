@@ -1,10 +1,11 @@
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 
 import { api } from "@/api";
 import Modal from "@/components/modal";
 import ModelFormCar from "@/components/modelsForm/modelFormCar";
-import { Cars } from "@/types/cars";
+import { Car } from "@/types/cars";
 import { formatKilometer } from "@/util/formatKilometer";
 import {
   Box,
@@ -16,11 +17,12 @@ import {
 } from "@mui/material";
 
 interface CarsLayoutProps {
-  cars: Cars[];
+  cars: Car[];
 }
 const CarsLayout = ({ cars }: CarsLayoutProps) => {
   const [modalState, setModalState] = useState(false);
   const methods = useForm();
+  const route = useRouter();
   const { handleSubmit } = methods;
 
   function closeModal() {
@@ -39,7 +41,7 @@ const CarsLayout = ({ cars }: CarsLayoutProps) => {
       sx={{ minHeight: "calc(100vh - 100px)", boxShadow: 1, py: 2 }}
     >
       <Typography fontSize={32} fontWeight="bold" ml={2}>
-        Edite ou adicione um carro:
+        Crie ou selecione um carro para editar:
       </Typography>
       <Box
         sx={{
@@ -53,6 +55,7 @@ const CarsLayout = ({ cars }: CarsLayoutProps) => {
         {cars.map(({ marcaModelo, anoFabricacao, kmAtual, id }) => (
           <Card
             key={id}
+            onClick={() => route.push(`/cars/edit/${id}`)}
             sx={{
               width: 275,
               bgcolor: "secondary",
