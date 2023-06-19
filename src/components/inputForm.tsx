@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
-import EditIcon from "@mui/icons-material/Edit";
-import { Grid, TextField, ButtonBase, TextFieldProps } from "@mui/material";
+import { Grid, TextField, TextFieldProps } from "@mui/material";
 
 type InputFormProps = {
   label: string;
@@ -31,12 +29,6 @@ const InputForm = ({ label, name, value, ...otherProps }: InputFormProps) => {
           />
         )}
       />
-      {/* <ButtonBase
-        sx={{ m: "auto 0", ml: 2 }}
-        onClick={() => setDisabled(oldValue => !oldValue)}
-      >
-        <EditIcon color="action" />
-      </ButtonBase> */}
     </Grid>
   );
 };

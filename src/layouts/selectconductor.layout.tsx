@@ -1,6 +1,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
 
+import { api } from "@/api";
 import CardUser from "@/components/cardUser";
 import Modal from "@/components/modal";
 import useLocalStorage from "@/hooks/useLocalStorage";
@@ -16,6 +18,9 @@ const SelectconductorLayout = ({ conductors }: selectConductorLayoutProps) => {
   const [user, setUser] = useLocalStorage("user");
   const router = useRouter();
 
+  const methods = useForm();
+  const { handleSubmit } = methods;
+
   function closeModal() {
     setModalState(false);
   }
@@ -28,6 +33,16 @@ const SelectconductorLayout = ({ conductors }: selectConductorLayoutProps) => {
     }
   }
 
+  async function onSubmit(values: FieldValues) {
+    const dataForm = {
+      ...values,
+      vencimentoHabilitacao: new Date(
+        values.vencimentoHabilitacao
+      ).toISOString()
+    };
+    const response = await api.post("/condutor", dataForm);
+    console.log(response);
+  }
   return (
     <Container
       maxWidth="xl"
@@ -65,12 +80,14 @@ const SelectconductorLayout = ({ conductors }: selectConductorLayoutProps) => {
           Criar Condutor
         </Button>
       </Box>
-      <Modal
-        closeModal={closeModal}
-        modalState={modalState}
-        onSubmit={() => {}}
-        type="conductor"
-      />
+      <FormProvider {...methods}>
+        <Modal
+          closeModal={closeModal}
+          modalState={modalState}
+          onSubmit={handleSubmit(onSubmit)}
+          type="conductor"
+        />
+      </FormProvider>
     </Container>
   );
 };

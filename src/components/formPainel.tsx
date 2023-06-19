@@ -39,22 +39,31 @@ const ClienteComponent = ({ clientData }: { clientData: Client }) => {
 };
 
 const CondutorComponent = ({ conductorData }: { conductorData: Conductor }) => {
+  const currentDate = new Date(conductorData.vencimentoHabilitacao);
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDate.getDate()).padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}`;
+
   return (
     <Grid maxWidth="md" container rowSpacing={2}>
-      <InputForm label="Nome" value={conductorData.nome} name="nome" />
+      <InputForm disabled label="Nome" value={conductorData.nome} name="nome" />
       <InputForm
+        disabled
         label="Número Habilitação"
         value={conductorData.numeroHabilitacao}
         name="numeroHabilitacao"
       />
       <InputForm
+        disabled
         label="Categoria Habilitação"
         value={conductorData.catergoriaHabilitacao}
         name="catergoriaHabilitacao"
       />
       <InputForm
+        type="date"
         label="Vencimento Habilitação"
-        value={conductorData.vencimentoHabilitacao}
+        value={formattedDate}
         name="vencimentoHabilitacao"
       />
     </Grid>

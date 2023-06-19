@@ -1,12 +1,9 @@
 import { FormEvent } from "react";
 
-import {
-  Box,
-  Button,
-  Grid,
-  Modal as ModalWrapper,
-  TextField
-} from "@mui/material";
+import { Box, Button, Grid, Modal as ModalWrapper } from "@mui/material";
+
+import ModelFormClient from "./modelsForm/modelFormClient";
+import ModelFormConductor from "./modelsForm/modelFormConductor";
 
 interface ModalProps {
   modalState: boolean;
@@ -14,69 +11,6 @@ interface ModalProps {
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   type: "client" | "conductor";
 }
-
-const FormConductor = () => (
-  <>
-    <Grid item>
-      <TextField label="Nome" variant="filled" name="nome" />
-    </Grid>
-    <Grid item>
-      <TextField
-        label="Número Habilitação"
-        variant="filled"
-        name="numeroHabilitacao"
-      />
-    </Grid>
-    <Grid item>
-      <TextField
-        label="Categoria Habilitação"
-        variant="filled"
-        name="catergoriaHabilitacao"
-      />
-    </Grid>
-    <Grid item>
-      <TextField
-        label="Vencimento Habilitação"
-        variant="filled"
-        name="vencimentoHabilitacao"
-        type="date"
-      />
-    </Grid>
-  </>
-);
-
-const FormClient = () => (
-  <>
-    <Grid item>
-      <TextField
-        variant="filled"
-        label="Número Documento"
-        name="numeroDocumento"
-      />
-    </Grid>
-    <Grid item>
-      <TextField variant="filled" label="Tipo Documento" name="tipoDocumento" />
-    </Grid>
-    <Grid item>
-      <TextField variant="filled" label="Nome" name="nome" />
-    </Grid>
-    <Grid item>
-      <TextField variant="filled" label="Logradouro" name="logradouro" />
-    </Grid>
-    <Grid item>
-      <TextField variant="filled" label="Número" name="numero" />
-    </Grid>
-    <Grid item>
-      <TextField variant="filled" label="Bairro" name="bairro" />
-    </Grid>
-    <Grid item>
-      <TextField variant="filled" label="Cidade" name="cidade" />
-    </Grid>
-    <Grid item>
-      <TextField variant="filled" label="UF" name="uf" />
-    </Grid>
-  </>
-);
 
 const Modal = ({ modalState, closeModal, onSubmit, type }: ModalProps) => {
   return (
@@ -126,9 +60,13 @@ const Modal = ({ modalState, closeModal, onSubmit, type }: ModalProps) => {
             }
           })}
         >
-          {type === "client" ? <FormClient /> : <FormConductor />}
+          {type === "client" ? <ModelFormClient /> : <ModelFormConductor />}
         </Grid>
-        <Button variant="contained" sx={{ maxWidth: "250px", m: "0 auto" }}>
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ maxWidth: "250px", m: "0 auto" }}
+        >
           Criar
         </Button>
       </Box>

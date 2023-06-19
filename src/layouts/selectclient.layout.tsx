@@ -1,6 +1,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
 
+import { api } from "@/api";
 import CardUser from "@/components/cardUser";
 import Modal from "@/components/modal";
 import useLocalStorage from "@/hooks/useLocalStorage";
@@ -14,6 +16,9 @@ const SelectclientLayout = ({ clients }: selectClientLayoutProps) => {
   const [user, setUser] = useLocalStorage("user");
   const router = useRouter();
 
+  const methods = useForm();
+  const { handleSubmit } = methods;
+
   function closeModal() {
     setModalState(false);
   }
@@ -24,6 +29,11 @@ const SelectclientLayout = ({ clients }: selectClientLayoutProps) => {
       setUser({ id: client.id, type: "cliente" });
       router.push("/painel");
     }
+  }
+
+  async function onSubmit(values: FieldValues) {
+    const response = await api.post("/cliente", values);
+    console.log(response);
   }
 
   return (
@@ -60,15 +70,17 @@ const SelectclientLayout = ({ clients }: selectClientLayoutProps) => {
           type="submit"
           onClick={() => setModalState(true)}
         >
-          Criar Condutor
+          Criar Cliente
         </Button>
       </Box>
-      <Modal
-        closeModal={closeModal}
-        modalState={modalState}
-        onSubmit={() => {}}
-        type="conductor"
-      />
+      <FormProvider {...methods}>
+        <Modal
+          closeModal={closeModal}
+          modalState={modalState}
+          onSubmit={handleSubmit(onSubmit)}
+          type="client"
+        />
+      </FormProvider>
     </Container>
   );
 };
