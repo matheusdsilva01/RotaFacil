@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter as useNavigation } from "next/navigation";
 import { useRouter } from "next/router";
 import { useState, MouseEvent } from "react";
@@ -10,9 +11,11 @@ import ModelFormClient from "@/components/modelsForm/modelFormClient";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { Client } from "@/types/users";
 import { Box, Button, Container, Typography } from "@mui/material";
+
 interface selectClientLayoutProps {
   clients: Client[];
 }
+
 const SelectclientLayout = ({ clients }: selectClientLayoutProps) => {
   const [modalState, setModalState] = useState(false);
   const [user, setUser] = useLocalStorage("user");
@@ -85,7 +88,26 @@ const SelectclientLayout = ({ clients }: selectClientLayoutProps) => {
           />
         ))}
       </Box>
-      <Box sx={{ float: "right", p: "10px 5px", mt: 5 }}>
+      <Box
+        sx={{
+          float: "right",
+          p: "10px 5px",
+          mt: 5,
+          display: "flex",
+          flexWrap: "wrap",
+          columnGap: 2,
+          rowGap: 2
+        }}
+      >
+        <Link href="/tracks">
+          <Button
+            color="secondary"
+            variant="contained"
+            sx={{ paddingY: 1, paddingX: 3, width: 208 }}
+          >
+            Criar deslocamento
+          </Button>
+        </Link>
         <Button
           color="primary"
           variant="contained"
