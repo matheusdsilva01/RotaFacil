@@ -52,7 +52,7 @@ const header = () => {
   );
 
   return (
-    <Box sx={{ display: "flex", position: "sticky", top: 0 }}>
+    <Box sx={{ display: "flex", position: "sticky", top: 0, zIndex: 100 }}>
       <AppBar component="nav" sx={{ position: "initial" }}>
         <Toolbar>
           {/* img logo */}

@@ -1,6 +1,7 @@
+import { useRouter as useNavigation } from "next/navigation";
 import { useRouter } from "next/router";
 import { Controller, FieldValues, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
+import { TypeOptions, toast } from "react-toastify";
 
 import { api, fetcher } from "@/api";
 import Loading from "@/components/loading";
@@ -10,6 +11,7 @@ import useSWR from "swr";
 
 const PageEditCar = () => {
   const router = useRouter();
+  const navigation = useNavigation();
   const { id } = router.query;
   const { data: car, isLoading } = useSWR<Car>(
     id && `/veiculo/${id}`,
@@ -20,10 +22,23 @@ const PageEditCar = () => {
   );
 
   const { control, handleSubmit } = useForm<any>();
-  const notify = (message: string) => toast(message, { type: "success" });
+  const notify = (message: string, type: TypeOptions) =>
+    toast(message, { type });
+
   async function onSubmit(values: FieldValues) {
-    const response = await api.put(`/veiculo/${id}`, { id, ...values });
-    notify("Veículo editado com sucesso!!!");
+    const { id, placa, ...oldCarData } = car!;
+
+    if (JSON.stringify(oldCarData) === JSON.stringify(values)) {
+      notify("Mude seus dados para atualizar seu cadastro!!!", "info");
+    } else {
+      try {
+        await api.put(`/veiculo/${id}`, { id, ...values });
+        notify("Veículo editado com sucesso!!!", "success");
+        navigation.push("/cars");
+      } catch (err) {
+        console.log(err);
+      }
+    }
   }
 
   if (isLoading || !id) {

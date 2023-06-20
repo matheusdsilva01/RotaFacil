@@ -1,5 +1,7 @@
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import Link from "next/link";
+import { useRouter as useNavigation } from "next/navigation";
+import { useRouter } from "next/router";
+import { useState, MouseEvent } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 
 import { api } from "@/api";
@@ -17,8 +19,11 @@ interface selectConductorLayoutProps {
 const SelectconductorLayout = ({ conductors }: selectConductorLayoutProps) => {
   const [modalState, setModalState] = useState(false);
   const [user, setUser] = useLocalStorage("user");
-  const router = useRouter();
-
+  const route = useRouter();
+  const navigation = useNavigation();
+  const refreshData = () => {
+    route.replace(route.asPath);
+  };
   const methods = useForm();
   const { handleSubmit } = methods;
 
@@ -30,7 +35,7 @@ const SelectconductorLayout = ({ conductors }: selectConductorLayoutProps) => {
     const conductor = conductors.find(conduc => conduc.id === id);
     if (conductor) {
       setUser({ id: conductor.id, type: "condutor" });
-      router.push("/painel");
+      navigation.push("/painel");
     }
   }
 
@@ -41,16 +46,34 @@ const SelectconductorLayout = ({ conductors }: selectConductorLayoutProps) => {
         values.vencimentoHabilitacao
       ).toISOString()
     };
-    const response = await api.post("/condutor", dataForm);
-    console.log(response);
+
+    try {
+      await api.post("/condutor", dataForm);
+      refreshData();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      closeModal();
+    }
   }
+
+  const deleteUser = async (
+    event: MouseEvent<HTMLButtonElement>,
+    id: number
+  ) => {
+    event.stopPropagation();
+    const response = await api
+      .delete(`/condutor/${id}`, { data: { id: id } })
+      .then(res => refreshData());
+  };
+
   return (
     <Container
       maxWidth="xl"
       sx={{ height: "calc(100vh - 100px)", boxShadow: 1, mt: 4 }}
     >
       <Typography fontSize={32} fontWeight="bold" ml={2}>
-        Selecione um condutor
+        Selecione um condutor:
       </Typography>
       <Box
         sx={{
@@ -67,10 +90,30 @@ const SelectconductorLayout = ({ conductors }: selectConductorLayoutProps) => {
             nome={nome}
             additionalInfo={`CNH: ${catergoriaHabilitacao}`}
             onClick={() => setConductor(id)}
+            deleteUser={event => deleteUser(event, id)}
           />
         ))}
       </Box>
-      <Box sx={{ float: "right", p: "10px 5px", mt: 5 }}>
+      <Box
+        sx={{
+          float: "right",
+          p: "10px 5px",
+          mt: 5,
+          display: "flex",
+          flexWrap: "wrap",
+          columnGap: 2,
+          rowGap: 2
+        }}
+      >
+        <Link href="/cars">
+          <Button
+            color="secondary"
+            variant="contained"
+            sx={{ paddingY: 1, paddingX: 3, width: 208 }}
+          >
+            Ver veículos
+          </Button>
+        </Link>
         <Button
           color="primary"
           variant="contained"

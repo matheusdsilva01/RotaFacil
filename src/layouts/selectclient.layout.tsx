@@ -1,5 +1,6 @@
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter as useNavigation } from "next/navigation";
+import { useRouter } from "next/router";
+import { useState, MouseEvent } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 
 import { api } from "@/api";
@@ -15,8 +16,11 @@ interface selectClientLayoutProps {
 const SelectclientLayout = ({ clients }: selectClientLayoutProps) => {
   const [modalState, setModalState] = useState(false);
   const [user, setUser] = useLocalStorage("user");
-  const router = useRouter();
-
+  const navigation = useNavigation();
+  const route = useRouter();
+  const refreshData = () => {
+    route.replace(route.asPath);
+  };
   const methods = useForm();
   const { handleSubmit } = methods;
 
@@ -28,14 +32,31 @@ const SelectclientLayout = ({ clients }: selectClientLayoutProps) => {
     const client = clients.find(client => client.id === id);
     if (client) {
       setUser({ id: client.id, type: "cliente" });
-      router.push("/painel");
+      navigation.push("/painel");
     }
   }
 
   async function onSubmit(values: FieldValues) {
-    const response = await api.post("/cliente", values);
-    console.log(response);
+    try {
+      await api.post("/cliente", values);
+      closeModal();
+      refreshData();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      closeModal();
+    }
   }
+
+  const deleteUser = async (
+    event: MouseEvent<HTMLButtonElement>,
+    id: number
+  ) => {
+    event.stopPropagation();
+    const response = await api
+      .delete(`/cliente/${id}`, { data: { id: id } })
+      .then(res => refreshData());
+  };
 
   return (
     <Container
@@ -43,7 +64,7 @@ const SelectclientLayout = ({ clients }: selectClientLayoutProps) => {
       sx={{ minHeight: "calc(100vh - 100px)", boxShadow: 1, py: 2 }}
     >
       <Typography fontSize={32} fontWeight="bold" ml={2}>
-        Selecione um cliente
+        Selecione um cliente:
       </Typography>
       <Box
         sx={{
@@ -60,6 +81,7 @@ const SelectclientLayout = ({ clients }: selectClientLayoutProps) => {
             nome={nome}
             additionalInfo={`Cidade: ${cidade}`}
             onClick={() => setClient(id)}
+            deleteUser={event => deleteUser(event, id)}
           />
         ))}
       </Box>

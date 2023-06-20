@@ -38,7 +38,7 @@ const PainelLayout = () => {
     if (JSON.stringify(oldUserData) === JSON.stringify(formData)) {
       notify("Mude seus dados para atualizar seu cadastro!!!", "info");
     } else {
-      const response =
+      try {
         user.type === "cliente"
           ? await api.put(`/cliente/${user.id}`, {
               ...formData,
@@ -48,7 +48,10 @@ const PainelLayout = () => {
               ...formData,
               id: userData.id
             });
-      notify("Dados alterados com sucesso", "success");
+        notify("Dados alterados com sucesso", "success");
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -87,15 +90,6 @@ const PainelLayout = () => {
           >
             Atualizar dados
           </Button>
-          <Link href={user.type === "cliente" ? "/" : "/cars"}>
-            <Button
-              color="secondary"
-              variant="contained"
-              sx={{ paddingY: 1, paddingX: 3, width: 208 }}
-            >
-              {user.type === "cliente" ? "Criar deslocamento" : "Ver veículos"}
-            </Button>
-          </Link>
         </Box>
       </Container>
     </FormProvider>
