@@ -16,7 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>Rota Facil</title>
-        <meta property="og:title" content="My page title" key="title" />
+        <meta property="og:title" content="Rota Facil" key="title" />
         <link rel="shortcut icon" href="/favicon.svg" type="image/x-icon" />
       </Head>
       <Header />
