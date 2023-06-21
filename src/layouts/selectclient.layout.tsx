@@ -76,28 +76,45 @@ const SelectclientLayout = ({ clients }: selectClientLayoutProps) => {
       maxWidth="xl"
       sx={{ minHeight: "calc(100vh - 100px)", boxShadow: 1, py: 2 }}
     >
-      <Typography fontSize={32} fontWeight="bold" ml={2}>
-        Selecione um cliente:
-      </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          gap: "10px 20px",
-          mt: 4
-        }}
-      >
-        {clients.map(({ nome, cidade, id }) => (
-          <CardUser
-            key={id}
-            nome={nome}
-            additionalInfo={`Cidade: ${cidade}`}
-            onClick={() => setClient(id)}
-            deleteUser={event => deleteUser(event, id)}
-          />
-        ))}
-      </Box>
+      {clients.length > 0 ? (
+        <>
+          <Typography fontSize={32} fontWeight="bold" ml={2}>
+            Selecione um cliente:
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "10px 20px",
+              mt: 4
+            }}
+          >
+            {clients.map(({ nome, cidade, id }) => (
+              <CardUser
+                key={id}
+                nome={nome}
+                additionalInfo={`Cidade: ${cidade}`}
+                onClick={() => setClient(id)}
+                deleteUser={event => deleteUser(event, id)}
+              />
+            ))}
+          </Box>
+        </>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            mt: 4
+          }}
+        >
+          <Typography fontWeight={600} fontSize={32}>
+            Sem clientes no sistema, crie um cliente
+          </Typography>
+        </Box>
+      )}
       <Box
         sx={{
           float: "right",

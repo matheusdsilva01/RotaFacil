@@ -10,7 +10,7 @@ import ModelFormTrack from "@/components/modelsForm/modelFormTrack";
 import TrackTable from "@/components/tableTable";
 import { Track } from "@/types/tracks";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Container, Box, Button } from "@mui/material";
+import { Container, Box, Button, Typography } from "@mui/material";
 import { z } from "zod";
 
 interface TrackLayoutProps {
@@ -53,14 +53,30 @@ const TrackLayout = ({ tracks }: TrackLayoutProps) => {
       closeModal();
     }
   }
+
   return (
     <Container
       maxWidth="xl"
       sx={{ p: 2, backgroundColor: "gray", overflow: "hidden" }}
     >
-      <Box sx={{ overflowX: "auto" }}>
-        <TrackTable tracks={tracks} />
-      </Box>
+      {tracks.length > 0 ? (
+        <Box sx={{ overflowX: "auto" }}>
+          <TrackTable tracks={tracks} />
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            mt: 4
+          }}
+        >
+          <Typography fontWeight={600} fontSize={32}>
+            Sem deslocamentos no sistema, crie um deslocamento
+          </Typography>
+        </Box>
+      )}
       <FormProvider {...methods}>
         <Modal
           onSubmit={handleSubmit(onSubmit)}

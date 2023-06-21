@@ -1,26 +1,16 @@
-import { useRouter as useNavigation } from "next/navigation";
 import { useRouter } from "next/router";
-import { useState, MouseEvent } from "react";
+import { MouseEvent, useState } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { TypeOptions, toast } from "react-toastify";
 
 import { api } from "@/api";
 import { createCarFormSchema } from "@/api/schemas/schemas";
+import CardCar from "@/components/cardCar";
 import Modal from "@/components/modal";
 import ModelFormCar from "@/components/modelsForm/modelFormCar";
 import { Car } from "@/types/cars";
-import { formatKilometer } from "@/util/formatKilometer";
 import { zodResolver } from "@hookform/resolvers/zod";
-import DeleteIcon from "@mui/icons-material/Delete";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Container,
-  Popover,
-  Typography
-} from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 
 interface CarsLayoutProps {
   cars: Car[];
@@ -28,7 +18,6 @@ interface CarsLayoutProps {
 const CarsLayout = ({ cars }: CarsLayoutProps) => {
   const [modalState, setModalState] = useState(false);
   const methods = useForm({ resolver: zodResolver(createCarFormSchema) });
-  const navigation = useNavigation();
   const route = useRouter();
   const { handleSubmit } = methods;
   const notify = (message: string, type?: TypeOptions) =>
@@ -67,18 +56,6 @@ const CarsLayout = ({ cars }: CarsLayoutProps) => {
     }
   }
 
-  // popover
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-
-  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
   return (
     <Container
       maxWidth="xl"
@@ -88,96 +65,39 @@ const CarsLayout = ({ cars }: CarsLayoutProps) => {
         py: 2
       }}
     >
-      <Typography fontSize={32} fontWeight="bold" ml={2}>
-        Crie ou selecione um carro para editar:
-      </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          gap: "10px 20px",
-          mt: 4
-        }}
-      >
-        {cars.map(({ marcaModelo, anoFabricacao, kmAtual, id }) => (
-          <Card
-            key={id}
-            onClick={() => navigation.push(`/cars/edit/${id}`)}
+      {cars.length > 0 ? (
+        <>
+          <Typography fontSize={32} fontWeight="bold" ml={2}>
+            Crie ou selecione um carro para editar:
+          </Typography>
+          <Box
             sx={{
-              width: 275,
-              minHeight: 120,
-              bgcolor: "secondary",
-              position: "relative",
-              ":hover": {
-                boxShadow: 3
-              }
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "10px 20px",
+              mt: 4
             }}
           >
-            <CardContent>
-              <Typography
-                sx={{
-                  fontSize: {
-                    md: 22
-                  }
-                }}
-                fontWeight="bold"
-                noWrap
-              >
-                {marcaModelo}
-              </Typography>
-              <Typography sx={{ fontSize: { fontSize: 14, md: 16 } }}>
-                Ano: {anoFabricacao}
-              </Typography>
-              <Typography sx={{ fontSize: { fontSize: 14, md: 16 } }}>
-                Quilometragem: {formatKilometer(kmAtual)}
-              </Typography>
-            </CardContent>
-            <Box>
-              <Button
-                aria-owns={open ? "mouse-over-popover" : undefined}
-                aria-haspopup="true"
-                onMouseEnter={handlePopoverOpen}
-                onMouseLeave={handlePopoverClose}
-                sx={{
-                  float: "right",
-                  position: "absolute",
-                  bottom: 0,
-                  right: 0
-                }}
-                onClick={event => deleteUser(event, id)}
-              >
-                <DeleteIcon fontSize="small" />
-              </Button>
-              <Popover
-                id="mouse-over-popover"
-                sx={{
-                  pointerEvents: "none"
-                }}
-                open={open}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left"
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left"
-                }}
-                onClose={handlePopoverClose}
-                disableRestoreFocus
-              >
-                <Typography
-                  sx={{ p: 1, backgroundColor: "darkred", color: "white" }}
-                  lineHeight={1}
-                >
-                  Deletar
-                </Typography>
-              </Popover>
-            </Box>
-          </Card>
-        ))}
-      </Box>
+            {cars.map(car => (
+              <CardCar key={car.id} deleteUser={deleteUser} car={car} />
+            ))}
+          </Box>
+        </>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            mt: 4
+          }}
+        >
+          <Typography fontWeight={600} fontSize={32}>
+            Sem veículos no sistema, crie um veículo
+          </Typography>
+        </Box>
+      )}
       <Box
         sx={{
           float: "right",

@@ -82,28 +82,45 @@ const SelectconductorLayout = ({ conductors }: selectConductorLayoutProps) => {
       maxWidth="xl"
       sx={{ height: "calc(100vh - 100px)", boxShadow: 1, mt: 4 }}
     >
-      <Typography fontSize={32} fontWeight="bold" ml={2}>
-        Selecione um condutor:
-      </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          gap: "10px 20px",
-          mt: 4
-        }}
-      >
-        {conductors.map(({ nome, catergoriaHabilitacao, id }) => (
-          <CardUser
-            key={id}
-            nome={nome}
-            additionalInfo={`CNH: ${catergoriaHabilitacao}`}
-            onClick={() => setConductor(id)}
-            deleteUser={event => deleteUser(event, id)}
-          />
-        ))}
-      </Box>
+      {conductors.length > 0 ? (
+        <>
+          <Typography fontSize={32} fontWeight="bold" ml={2}>
+            Selecione um condutor:
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "10px 20px",
+              mt: 4
+            }}
+          >
+            {conductors.map(({ nome, catergoriaHabilitacao, id }) => (
+              <CardUser
+                key={id}
+                nome={nome}
+                additionalInfo={`CNH: ${catergoriaHabilitacao}`}
+                onClick={() => setConductor(id)}
+                deleteUser={event => deleteUser(event, id)}
+              />
+            ))}
+          </Box>
+        </>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            mt: 4
+          }}
+        >
+          <Typography fontWeight={600} fontSize={32}>
+            Sem condutores no sistema, crie um condutor
+          </Typography>
+        </Box>
+      )}
       <Box
         sx={{
           float: "right",
