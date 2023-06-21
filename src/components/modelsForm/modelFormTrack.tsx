@@ -1,10 +1,12 @@
 import { Controller, useFormContext } from "react-hook-form";
 
 import { fetcher } from "@/api";
+import { createTrackFormSchema } from "@/api/schemas/schemas";
 import { Car } from "@/types/cars";
 import { Client, Conductor } from "@/types/users";
 import {
   FormControl,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -12,9 +14,15 @@ import {
   TextField
 } from "@mui/material";
 import useSWR from "swr";
+import { z } from "zod";
+
+type CreateTrackFormData = z.infer<typeof createTrackFormSchema>;
 
 const modelFormTrack = () => {
-  const { control } = useFormContext();
+  const {
+    control,
+    formState: { errors }
+  } = useFormContext<CreateTrackFormData>();
   const { data: conductors } = useSWR<Conductor[]>("/condutor", fetcher, {
     revalidateOnFocus: false
     // refreshInterval: 60
@@ -27,7 +35,7 @@ const modelFormTrack = () => {
     revalidateOnFocus: false
     // refreshInterval: 60
   });
-
+  console.log(errors);
   return (
     <>
       <Grid item sx={{ minWidth: 180 }}>
@@ -37,14 +45,15 @@ const modelFormTrack = () => {
           name="idCliente"
           render={({ field }) => (
             <FormControl fullWidth>
-              <InputLabel id="idClient">Nome Cliente</InputLabel>
-              <Select {...field} labelId="idClient" label="Id cliente">
+              <InputLabel id="idCliente">Nome Cliente</InputLabel>
+              <Select {...field} labelId="idCliente" label="Id cliente">
                 {clients?.map(client => (
-                  <MenuItem key={client.id} value={client.id}>
+                  <MenuItem key={client.id} value={String(client.id)}>
                     {client.nome}
                   </MenuItem>
                 ))}
               </Select>
+              <FormHelperText>{errors.idCliente?.message}</FormHelperText>
             </FormControl>
           )}
         />
@@ -59,11 +68,12 @@ const modelFormTrack = () => {
               <InputLabel id="idCondutor">Nome Condutor</InputLabel>
               <Select {...field} labelId="idCondutor" label="Id condutor">
                 {conductors?.map(conductor => (
-                  <MenuItem key={conductor.id} value={conductor.id}>
+                  <MenuItem key={conductor.id} value={String(conductor.id)}>
                     {conductor.nome}
                   </MenuItem>
                 ))}
               </Select>
+              <FormHelperText>{errors.idCondutor?.message}</FormHelperText>
             </FormControl>
           )}
         />
@@ -78,11 +88,12 @@ const modelFormTrack = () => {
               <InputLabel id="idVeiculo">Veículo</InputLabel>
               <Select {...field} labelId="idVeiculo" label="Id car">
                 {cars?.map(car => (
-                  <MenuItem key={car.id} value={car.id}>
+                  <MenuItem key={car.id} value={String(car.id)}>
                     {car.marcaModelo}
                   </MenuItem>
                 ))}
               </Select>
+              <FormHelperText>{errors.idVeiculo?.message}</FormHelperText>
             </FormControl>
           )}
         />
@@ -95,6 +106,7 @@ const modelFormTrack = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.motivo?.message}
               label="Motivo"
               variant="filled"
               name="motivo"
@@ -110,6 +122,7 @@ const modelFormTrack = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.observacao?.message}
               label="Observação"
               variant="filled"
               name="observacao"
@@ -125,9 +138,10 @@ const modelFormTrack = () => {
           render={({ field }) => (
             <TextField
               {...field}
-              label="Checklist"
+              helperText={errors.checklist?.message}
               variant="filled"
               name="checklist"
+              label="Checklist"
             />
           )}
         />

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { string, z } from "zod";
 
 export const createCarFormSchema = z.object({
   placa: z.string().nonempty("Campo obrigatório"),
@@ -43,4 +43,17 @@ export const createConductorFormSchema = z.object({
 
 export const editConductorFormSchema = z.object({
   vencimentoHabilitacao: z.string().nonempty("Campo obrigatório")
+});
+
+export const createTrackFormSchema = z.object({
+  checklist: z.string().nonempty("Campo obrigatório"),
+  motivo: z.string().nonempty("Campo obrigatório"),
+  observacao: z.string().nonempty("Campo obrigatório"),
+  idCondutor: z.string().nonempty("Campo obrigatório").min(1),
+  idVeiculo: z.string().nonempty("Campo obrigatório").min(1),
+  idCliente: z.string().nonempty("Campo obrigatório").min(1)
+});
+
+export const closeTrackFormSchema = z.object({
+  kmFinal: z.string().nonempty("Campo obrigatório")
 });

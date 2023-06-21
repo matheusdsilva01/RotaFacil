@@ -1,18 +1,38 @@
 import { useRouter as useNavigation } from "next/navigation";
 import { useRouter } from "next/router";
+import { FieldValues, useForm } from "react-hook-form";
 import { TypeOptions, toast } from "react-toastify";
 
 import { fetcher, api } from "@/api";
+import { closeTrackFormSchema } from "@/api/schemas/schemas";
 import Loading from "@/components/loading";
 import { Track } from "@/types/tracks";
 import { formatKilometer } from "@/util/formatKilometer";
-import { Container, Typography, Grid, Box, Button } from "@mui/material";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Container,
+  Typography,
+  Grid,
+  Box,
+  Button,
+  TextField
+} from "@mui/material";
 import useSWR from "swr";
+import { z } from "zod";
+
+type closeTrackFormData = z.infer<typeof closeTrackFormSchema>;
 
 const TrackDetailLayout = () => {
   const route = useRouter();
   const navigate = useNavigation();
   const { id } = route.query;
+  const {
+    handleSubmit,
+    register,
+    formState: { errors }
+  } = useForm<closeTrackFormData>({
+    resolver: zodResolver(closeTrackFormSchema)
+  });
 
   const notify = (message: string, type?: TypeOptions) =>
     toast(message, { type });
@@ -36,13 +56,12 @@ const TrackDetailLayout = () => {
     }
   }
 
-  async function closeTrack() {
+  async function closeTrack(values: FieldValues) {
     try {
       await api.put(`/deslocamento/${id}/encerrardeslocamento`, {
         id,
-        kmFinal: 100,
         fimDeslocamento: new Date().toISOString(),
-        observacao: "Sem observação"
+        ...values
       });
       navigate.push("/tracks");
       notify("Deslocamento encerrado com sucesso!!", "info");
@@ -56,6 +75,8 @@ const TrackDetailLayout = () => {
       <Container
         maxWidth="xl"
         sx={{ height: "calc(100vh - 100px)", boxShadow: 1, mt: 4 }}
+        component="form"
+        onSubmit={handleSubmit(closeTrack)}
       >
         <Typography fontSize={32} fontWeight="bold" ml={2}>
           Gerencie o deslocamento:
@@ -68,9 +89,23 @@ const TrackDetailLayout = () => {
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6} sx={{ display: "flex" }}>
-            <Typography fontSize={24}>
-              <strong>Kilometro final: </strong>
-              {formatKilometer(track?.kmFinal || 0)}
+            <Typography fontSize={24} sx={{ display: "flex" }}>
+              <Typography
+                component="strong"
+                my="auto"
+                fontWeight={700}
+                fontSize={24}
+              >
+                Kilometro final:{" "}
+              </Typography>
+              <TextField
+                {...register("kmFinal")}
+                helperText={errors.kmFinal?.message}
+                value={track?.kmFinal}
+                sx={{ m: "auto" }}
+                type="number"
+                inputMode="numeric"
+              />
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6} sx={{ display: "flex" }}>
@@ -127,7 +162,7 @@ const TrackDetailLayout = () => {
           <Button variant="contained" onClick={deleteTrack}>
             Apagar deslocamento
           </Button>
-          <Button variant="contained" onClick={closeTrack}>
+          <Button variant="contained" type="submit">
             Encerrar deslocamento
           </Button>
         </Box>

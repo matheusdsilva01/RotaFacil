@@ -1,23 +1,33 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useForm, FieldValues, FormProvider } from "react-hook-form";
+import { TypeOptions, toast } from "react-toastify";
 
 import { api } from "@/api";
+import { createTrackFormSchema } from "@/api/schemas/schemas";
 import Modal from "@/components/modal";
 import ModelFormTrack from "@/components/modelsForm/modelFormTrack";
 import TrackTable from "@/components/tableTable";
 import { Track } from "@/types/tracks";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Container, Box, Button } from "@mui/material";
+import { z } from "zod";
 
 interface TrackLayoutProps {
   tracks: Track[];
 }
 
+type CreateTrackFormData = z.infer<typeof createTrackFormSchema>;
+
 const TrackLayout = ({ tracks }: TrackLayoutProps) => {
   const [modalState, setModalState] = useState(false);
-  const methods = useForm();
+  const methods = useForm<CreateTrackFormData>({
+    resolver: zodResolver(createTrackFormSchema)
+  });
   const { handleSubmit } = methods;
   const route = useRouter();
+  const notify = (message: string, type?: TypeOptions) =>
+    toast(message, { type });
 
   const refreshData = () => {
     route.replace(route.asPath);
@@ -35,6 +45,7 @@ const TrackLayout = ({ tracks }: TrackLayoutProps) => {
     };
     try {
       await api.post("/deslocamento/iniciardeslocamento", dataForm);
+      notify("Deslocamento criado com sucesso!!!", "success");
       refreshData();
     } catch (err) {
       console.log(err);
