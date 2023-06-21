@@ -3,8 +3,11 @@ module.exports = {
   // on node 14.x coverage provider v8 offers good speed and more or less good report
   coverageProvider: "v8",
   collectCoverageFrom: [
-    "**/src/*.{js,jsx,ts,tsx}",
-    "!**/src/pages/*.{js,jsx,ts,tsx}",
+    "src/**/*.{ts,tsx}",
+    "!src/pages/**",
+    "!src/hooks/**",
+    "!src/api/**",
+    "!src/types/**",
     "!**/*.d.ts",
     "!**/node_modules/**",
     "!<rootDir>/out/**",
