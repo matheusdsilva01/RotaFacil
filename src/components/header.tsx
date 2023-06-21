@@ -17,7 +17,12 @@ import {
 } from "@mui/material";
 
 const drawerWidth = 240;
-const navItems = ["Cliente", "Condutor"];
+const navItems = [
+  { name: "Cliente", path: "/selectclient" },
+  { name: "Condutor", path: "/selectconductor" },
+  { name: "Veículo", path: "/cars" },
+  { name: "Deslocamento", path: "/tracks" }
+];
 const header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -39,13 +44,15 @@ const header = () => {
         />
       </Link>
       <Divider />
-      <List>
+      <List sx={{ "&>a": { textDecoration: "none", color: "inherit" } }}>
         {navItems.map(item => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
+          <Link href={item.path}>
+            <ListItem key={item.name} disablePadding>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <ListItemText primary={item.name} />
+              </ListItemButton>
+            </ListItem>
+          </Link>
         ))}
       </List>
     </Box>
@@ -87,9 +94,11 @@ const header = () => {
           </Link>
           <Box sx={{ display: { xs: "none", sm: "block" }, ml: "auto" }}>
             {navItems.map(item => (
-              <Button key={item} sx={{ color: "#fff" }}>
-                {item}
-              </Button>
+              <Link href={item.path}>
+                <Button key={item.name} sx={{ color: "#fff" }}>
+                  {item.name}
+                </Button>
+              </Link>
             ))}
           </Box>
         </Toolbar>
