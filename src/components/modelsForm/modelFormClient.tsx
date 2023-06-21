@@ -1,10 +1,17 @@
 import React from "react";
 import { useFormContext, Controller } from "react-hook-form";
 
+import { createClientFormSchema } from "@/api/schemas/schemas";
 import { Grid, TextField } from "@mui/material";
+import { z } from "zod";
+
+type CreateClientFormData = z.infer<typeof createClientFormSchema>;
 
 const ModelFormClient = () => {
-  const { control } = useFormContext();
+  const {
+    control,
+    formState: { errors }
+  } = useFormContext<CreateClientFormData>();
 
   return (
     <>
@@ -16,6 +23,7 @@ const ModelFormClient = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.numeroDocumento?.message}
               variant="filled"
               label="Número Documento"
               name="numeroDocumento"
@@ -31,6 +39,7 @@ const ModelFormClient = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.tipoDocumento?.message}
               variant="filled"
               label="Tipo Documento"
               name="tipoDocumento"
@@ -44,7 +53,13 @@ const ModelFormClient = () => {
           control={control}
           name="nome"
           render={({ field }) => (
-            <TextField {...field} variant="filled" label="Nome" name="nome" />
+            <TextField
+              {...field}
+              helperText={errors.nome?.message}
+              variant="filled"
+              label="Nome"
+              name="nome"
+            />
           )}
         />
       </Grid>
@@ -56,6 +71,7 @@ const ModelFormClient = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.logradouro?.message}
               variant="filled"
               label="Logradouro"
               name="logradouro"
@@ -71,6 +87,7 @@ const ModelFormClient = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.numero?.message}
               variant="filled"
               label="Número"
               name="numero"
@@ -86,6 +103,7 @@ const ModelFormClient = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.bairro?.message}
               variant="filled"
               label="Bairro"
               name="bairro"
@@ -101,6 +119,7 @@ const ModelFormClient = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.cidade?.message}
               variant="filled"
               label="Cidade"
               name="cidade"
@@ -114,7 +133,13 @@ const ModelFormClient = () => {
           control={control}
           name="uf"
           render={({ field }) => (
-            <TextField {...field} variant="filled" label="UF" name="uf" />
+            <TextField
+              {...field}
+              helperText={errors.uf?.message}
+              variant="filled"
+              label="UF"
+              name="uf"
+            />
           )}
         />
       </Grid>

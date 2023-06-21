@@ -1,9 +1,16 @@
 import { useFormContext, Controller } from "react-hook-form";
 
+import { createCarFormSchema } from "@/api/schemas/schemas";
 import { Grid, TextField } from "@mui/material";
+import { z } from "zod";
+
+type CreateCarFormData = z.infer<typeof createCarFormSchema>;
 
 const ModelFormCar = () => {
-  const { control } = useFormContext();
+  const {
+    control,
+    formState: { errors }
+  } = useFormContext<CreateCarFormData>();
 
   return (
     <>
@@ -13,7 +20,13 @@ const ModelFormCar = () => {
           control={control}
           name="placa"
           render={({ field }) => (
-            <TextField {...field} variant="filled" label="placa" name="placa" />
+            <TextField
+              {...field}
+              helperText={errors.placa?.message}
+              variant="filled"
+              label="placa"
+              name="placa"
+            />
           )}
         />
       </Grid>
@@ -25,6 +38,9 @@ const ModelFormCar = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.anoFabricacao?.message}
+              type="number"
+              inputMode="numeric"
               variant="filled"
               label="Ano de Fabricação"
               name="anoFabricacao"
@@ -40,6 +56,7 @@ const ModelFormCar = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.marcaModelo?.message}
               variant="filled"
               label="Marca ou modelo"
               name="marcaModelo"
@@ -55,6 +72,9 @@ const ModelFormCar = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.kmAtual?.message}
+              type="number"
+              inputMode="numeric"
               variant="filled"
               label="Km Atual"
               name="kmAtual"

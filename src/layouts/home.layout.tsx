@@ -22,7 +22,8 @@ const HomeLayout = () => {
             Aqui você poderá criar deslocamentos ou conduzir as pessoas
           </Typography>
           <Typography>
-            Escolha uma das opções abaixo para usar nosso sistema:
+            Escolha uma das opções abaixo para usar nosso sistema e tenha acesso
+            a recursos de cada função:
           </Typography>
           <Box sx={{ display: "flex", columnGap: 5 }}>
             <Link href={"/selectclient"} passHref>

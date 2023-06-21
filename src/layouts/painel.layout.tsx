@@ -1,21 +1,33 @@
 import Link from "next/link";
+import { useRouter as useNavigation } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { TypeOptions, toast } from "react-toastify";
 
 import { api, fetcher } from "@/api";
+import {
+  editClientFormSchema,
+  editConductorFormSchema
+} from "@/api/schemas/schemas";
 import FormPainel from "@/components/formPainel";
 import Loading from "@/components/loading";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { Client, Conductor, UserType } from "@/types/users";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Container, Typography } from "@mui/material";
 import useSWR from "swr";
 
-type UserData = Client;
+type UserData = Client | Conductor;
 
 const PainelLayout = () => {
   const [user, setUser] = useLocalStorage<UserType>("user");
-  const methods = useForm();
+  const navigation = useNavigation();
+  const methods = useForm({
+    resolver:
+      user && user.type === "cliente"
+        ? zodResolver(editClientFormSchema)
+        : zodResolver(editConductorFormSchema)
+  });
   const { handleSubmit } = methods;
 
   const { data: userData, isLoading } = useSWR<UserData>(
@@ -31,26 +43,43 @@ const PainelLayout = () => {
     toast(message, { type });
 
   const onSubmit = async (event: any) => {
-    const { id, ...oldUserData } = userData;
-    const formData =
-      user.type === "cliente" ? (event as Client) : (event as Conductor);
+    if (user.type === "cliente") {
+      const { id, ...oldUserData } = userData;
+      const formData = event as Client;
 
-    if (JSON.stringify(oldUserData) === JSON.stringify(formData)) {
-      notify("Mude seus dados para atualizar seu cadastro!!!", "info");
+      if (JSON.stringify(oldUserData) === JSON.stringify(formData)) {
+        notify("Mude seus dados para atualizar seu cadastro!!!", "info");
+      } else {
+        try {
+          await api.put(`/cliente/${user.id}`, {
+            ...formData,
+            id: userData.id
+          });
+          notify("Dados alterados com sucesso", "success");
+          navigation.push("/selectclient");
+        } catch (err) {
+          console.log(err);
+        }
+      }
     } else {
-      try {
-        user.type === "cliente"
-          ? await api.put(`/cliente/${user.id}`, {
-              ...formData,
-              id: userData.id
-            })
-          : await api.put(`/condutor/${user.id}`, {
-              ...formData,
-              id: userData.id
-            });
-        notify("Dados alterados com sucesso", "success");
-      } catch (err) {
-        console.log(err);
+      const { vencimentoHabilitacao } = userData as Conductor;
+      const formData = event as Conductor;
+      if (
+        new Date(vencimentoHabilitacao).toISOString() ===
+        new Date(formData.vencimentoHabilitacao + "T00:00:00").toISOString()
+      ) {
+        notify("Mude seus dados para atualizar seu cadastro!!!", "info");
+      } else {
+        try {
+          await api.put(`/condutor/${user.id}`, {
+            ...formData,
+            id: userData.id
+          });
+          notify("Dados alterados com sucesso", "success");
+          navigation.push("/selectconductor");
+        } catch (err) {
+          console.log(err);
+        }
       }
     }
   };

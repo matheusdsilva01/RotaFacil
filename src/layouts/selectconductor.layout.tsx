@@ -3,13 +3,16 @@ import { useRouter as useNavigation } from "next/navigation";
 import { useRouter } from "next/router";
 import { useState, MouseEvent } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
+import { TypeOptions, toast } from "react-toastify";
 
 import { api } from "@/api";
+import { createConductorFormSchema } from "@/api/schemas/schemas";
 import CardUser from "@/components/cardUser";
 import Modal from "@/components/modal";
 import ModelFormConductor from "@/components/modelsForm/modelFormConductor";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { Conductor } from "@/types/users";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Container, Typography, Box, Button } from "@mui/material";
 
 interface selectConductorLayoutProps {
@@ -24,8 +27,10 @@ const SelectconductorLayout = ({ conductors }: selectConductorLayoutProps) => {
   const refreshData = () => {
     route.replace(route.asPath);
   };
-  const methods = useForm();
+  const methods = useForm({ resolver: zodResolver(createConductorFormSchema) });
   const { handleSubmit } = methods;
+  const notify = (message: string, type?: TypeOptions) =>
+    toast(message, { type });
 
   function closeModal() {
     setModalState(false);
@@ -49,6 +54,7 @@ const SelectconductorLayout = ({ conductors }: selectConductorLayoutProps) => {
 
     try {
       await api.post("/condutor", dataForm);
+      notify("Condutor criado com sucesso!!!", "success");
       refreshData();
     } catch (err) {
       console.log(err);
@@ -62,9 +68,13 @@ const SelectconductorLayout = ({ conductors }: selectConductorLayoutProps) => {
     id: number
   ) => {
     event.stopPropagation();
-    const response = await api
-      .delete(`/condutor/${id}`, { data: { id: id } })
-      .then(res => refreshData());
+    try {
+      api.delete(`/condutor/${id}`, { data: { id: id } });
+      notify("Condutor deletado com sucesso!!!", "warning");
+      refreshData();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

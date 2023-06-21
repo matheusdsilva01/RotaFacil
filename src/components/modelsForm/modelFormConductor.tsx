@@ -1,9 +1,16 @@
 import { useFormContext, Controller } from "react-hook-form";
 
+import { createConductorFormSchema } from "@/api/schemas/schemas";
 import { Grid, TextField } from "@mui/material";
+import { z } from "zod";
+
+type CreateConductorFormData = z.infer<typeof createConductorFormSchema>;
 
 const ModelFormConductor = () => {
-  const { control } = useFormContext();
+  const {
+    control,
+    formState: { errors }
+  } = useFormContext<CreateConductorFormData>();
 
   return (
     <>
@@ -13,7 +20,13 @@ const ModelFormConductor = () => {
           defaultValue=""
           name="nome"
           render={({ field }) => (
-            <TextField {...field} label="Nome" variant="filled" name="nome" />
+            <TextField
+              {...field}
+              helperText={errors.nome?.message}
+              label="Nome"
+              variant="filled"
+              name="nome"
+            />
           )}
         />
       </Grid>
@@ -25,6 +38,7 @@ const ModelFormConductor = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.numeroHabilitacao?.message}
               label="Número Habilitação"
               variant="filled"
               name="numeroHabilitacao"
@@ -40,6 +54,7 @@ const ModelFormConductor = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.categoriaHabilitacao?.message}
               label="Categoria Habilitação"
               variant="filled"
               name="categoriaHabilitacao"
@@ -55,6 +70,7 @@ const ModelFormConductor = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.vencimentoHabilitacao?.message}
               label="Vencimento Habilitação"
               variant="filled"
               name="vencimentoHabilitacao"

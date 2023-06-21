@@ -62,6 +62,7 @@ const CondutorComponent = ({ conductorData }: { conductorData: Conductor }) => {
       />
       <InputForm
         type="date"
+        inputProps={{ min: formattedDate }}
         label="Vencimento Habilitação"
         value={formattedDate}
         name="vencimentoHabilitacao"

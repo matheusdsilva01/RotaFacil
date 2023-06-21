@@ -5,10 +5,15 @@ import { useForm, FieldValues, Controller } from "react-hook-form";
 import { TypeOptions, toast } from "react-toastify";
 
 import { fetcher, api } from "@/api";
+import { editCarFormSchema } from "@/api/schemas/schemas";
 import Loading from "@/components/loading";
 import { Car } from "@/types/cars";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Container, Typography, Box, TextField, Button } from "@mui/material";
 import useSWR from "swr";
+import { z } from "zod";
+
+type EditCarFormData = z.infer<typeof editCarFormSchema>;
 
 const EditCarLayout = () => {
   const router = useRouter();
@@ -22,7 +27,14 @@ const EditCarLayout = () => {
     }
   );
 
-  const { control, handleSubmit } = useForm<any>();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<EditCarFormData>({
+    resolver: zodResolver(editCarFormSchema)
+  });
+
   const notify = (message: string, type: TypeOptions) =>
     toast(message, { type });
 
@@ -70,6 +82,7 @@ const EditCarLayout = () => {
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.marcaModelo?.message}
               label="Marca ou modelo"
               InputLabelProps={{ shrink: true }}
             />
@@ -78,11 +91,14 @@ const EditCarLayout = () => {
           control={control}
         />
         <Controller
-          defaultValue={car?.anoFabricacao}
+          defaultValue={String(car?.anoFabricacao)}
           render={({ field }) => (
             <TextField
               {...field}
+              helperText={errors.anoFabricacao?.message}
               label="anoFabricacao"
+              type="number"
+              inputMode="numeric"
               InputLabelProps={{ shrink: true }}
             />
           )}
@@ -90,11 +106,14 @@ const EditCarLayout = () => {
           control={control}
         />
         <Controller
-          defaultValue={car?.kmAtual}
+          defaultValue={String(car?.kmAtual)}
           render={({ field }) => (
             <TextField
-              label="Kilometrogem"
               {...field}
+              helperText={errors.kmAtual?.message}
+              label="Kilometrogem"
+              type="number"
+              inputMode="numeric"
               InputLabelProps={{ shrink: true }}
             />
           )}

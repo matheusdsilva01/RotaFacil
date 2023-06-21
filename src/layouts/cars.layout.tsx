@@ -2,12 +2,15 @@ import { useRouter as useNavigation } from "next/navigation";
 import { useRouter } from "next/router";
 import { useState, MouseEvent } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
+import { TypeOptions, toast } from "react-toastify";
 
 import { api } from "@/api";
+import { createCarFormSchema } from "@/api/schemas/schemas";
 import Modal from "@/components/modal";
 import ModelFormCar from "@/components/modelsForm/modelFormCar";
 import { Car } from "@/types/cars";
 import { formatKilometer } from "@/util/formatKilometer";
+import { zodResolver } from "@hookform/resolvers/zod";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Box,
@@ -24,10 +27,12 @@ interface CarsLayoutProps {
 }
 const CarsLayout = ({ cars }: CarsLayoutProps) => {
   const [modalState, setModalState] = useState(false);
-  const methods = useForm();
+  const methods = useForm({ resolver: zodResolver(createCarFormSchema) });
   const navigation = useNavigation();
   const route = useRouter();
   const { handleSubmit } = methods;
+  const notify = (message: string, type?: TypeOptions) =>
+    toast(message, { type });
 
   const refreshData = () => {
     route.replace(route.asPath);
@@ -40,6 +45,7 @@ const CarsLayout = ({ cars }: CarsLayoutProps) => {
   async function onSubmit(values: FieldValues) {
     try {
       await api.post("/veiculo", values);
+      notify("Veiculo criado com sucesso!!!", "success");
       refreshData();
     } catch (err) {
       console.log(err);
@@ -52,6 +58,7 @@ const CarsLayout = ({ cars }: CarsLayoutProps) => {
     event.stopPropagation();
     try {
       await api.delete(`/veiculo/${id}`, { data: { id } });
+      notify("Veiculo deletado com sucesso!!!", "warning");
       refreshData();
     } catch (err) {
       console.log(err);
