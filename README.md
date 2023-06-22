@@ -40,16 +40,16 @@ npm run start
 ```
 
 ```jsx
-// rodar lint em todos os arquivos dentro de /src
+// executar lint em todos os arquivos dentro de /src
 npm run lint
 ```
 
 Executa o aplicativo:\
 Abra [http://localhost:3000](http://localhost:3000) para visualizá-lo no navegador.
+A página será recarregada se você fizer edições em nível de codigo.
 
 ## Testes
 Cobertura de teste no momento
-A página será recarregada se você fizer edições em nível de codigo.
 
 ![image](https://github.com/matheusdsilva01/RotaFacil/assets/85570707/46c54632-8a9e-4425-abb6-09bc159108fa)
 
