@@ -46,8 +46,8 @@ const header = () => {
       <Divider />
       <List sx={{ "&>a": { textDecoration: "none", color: "inherit" } }}>
         {navItems.map(item => (
-          <Link href={item.path}>
-            <ListItem key={item.name} disablePadding>
+          <Link key={item.name} href={item.path}>
+            <ListItem disablePadding>
               <ListItemButton sx={{ textAlign: "center" }}>
                 <ListItemText primary={item.name} />
               </ListItemButton>
@@ -94,10 +94,8 @@ const header = () => {
           </Link>
           <Box sx={{ display: { xs: "none", sm: "block" }, ml: "auto" }}>
             {navItems.map(item => (
-              <Link href={item.path}>
-                <Button key={item.name} sx={{ color: "#fff" }}>
-                  {item.name}
-                </Button>
+              <Link key={item.name} href={item.path}>
+                <Button sx={{ color: "#fff" }}>{item.name}</Button>
               </Link>
             ))}
           </Box>

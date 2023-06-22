@@ -5,8 +5,8 @@ import { render, screen } from "@testing-library/react";
 describe("home", () => {
   it("should render home page", () => {
     render(<Home />);
-    const heading = screen.getByText(/Bem vindo ao Rota Fácil!/i);
+    const textWelcome = screen.getByText(/Bem vindo ao Rota Fácil!/i);
 
-    expect(heading).toBeInTheDocument();
+    expect(textWelcome).toBeInTheDocument();
   });
 });
