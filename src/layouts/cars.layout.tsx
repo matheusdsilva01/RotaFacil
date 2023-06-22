@@ -80,7 +80,7 @@ const CarsLayout = ({ cars }: CarsLayoutProps) => {
             }}
           >
             {cars.map(car => (
-              <CardCar key={car.id} deleteUser={deleteUser} car={car} />
+              <CardCar key={car.id} deleteCar={deleteUser} car={car} />
             ))}
           </Box>
         </>

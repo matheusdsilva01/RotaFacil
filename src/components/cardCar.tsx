@@ -14,11 +14,11 @@ import {
 } from "@mui/material";
 
 type CardCarProps = {
-  deleteUser: (event: MouseEvent<HTMLButtonElement>, id: number) => void;
+  deleteCar: (event: MouseEvent<HTMLButtonElement>, id: number) => void;
   car: Car;
 };
 
-const CardCar = ({ deleteUser, car }: CardCarProps) => {
+const CardCar = ({ deleteCar: deleteUser, car }: CardCarProps) => {
   const { anoFabricacao, id, kmAtual, marcaModelo, placa } = car;
   const navigation = useNavigation();
   // popover
