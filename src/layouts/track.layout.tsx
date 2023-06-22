@@ -7,7 +7,7 @@ import { api } from "@/api";
 import { createTrackFormSchema } from "@/api/schemas/schemas";
 import Modal from "@/components/modal";
 import ModelFormTrack from "@/components/modelsForm/modelFormTrack";
-import TrackTable from "@/components/tableTable";
+import TrackTable from "@/components/trackTable";
 import { Track } from "@/types/tracks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Container, Box, Button, Typography } from "@mui/material";
