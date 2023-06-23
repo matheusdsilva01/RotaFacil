@@ -1,6 +1,6 @@
 import { api } from "@/api";
 import SelectclientLayout from "@/layouts/selectclient.layout";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 jest.mock("@/api", () => ({
@@ -68,27 +68,27 @@ describe("select client", () => {
     }
   ];
   it("should render selectclient page", () => {
-    render(<SelectclientLayout clients={clients} />);
-    const homeText = screen.getByText(/Selecione um cliente:/i);
+    const { getByText } = render(<SelectclientLayout clients={clients} />);
+    const homeText = getByText(/Selecione um cliente:/i);
     expect(homeText).toBeInTheDocument();
   });
 
   it("should render selectclient page without data", () => {
     const noClients: any = [];
-    render(<SelectclientLayout clients={noClients} />);
-    const messageWithoutData = screen.getByText(
+    const { getByText } = render(<SelectclientLayout clients={noClients} />);
+    const messageWithoutData = getByText(
       /Sem clientes no sistema, crie um cliente/i
     );
     expect(messageWithoutData).toBeInTheDocument();
   });
 
   it("should open modal create client", async () => {
-    render(<SelectclientLayout clients={clients} />);
-    const btn = screen.getByRole("button", {
+    const { getByRole } = render(<SelectclientLayout clients={clients} />);
+    const btn = getByRole("button", {
       name: /criar cliente/i
     });
     await userEvent.click(btn);
-    const inputNumberDocument = screen.getByRole("textbox", {
+    const inputNumberDocument = getByRole("textbox", {
       name: /número documento/i
     });
     expect(inputNumberDocument).toBeInTheDocument();
@@ -109,12 +109,12 @@ describe("select client", () => {
   });
 
   it("should close modal", async () => {
-    render(<SelectclientLayout clients={clients} />);
-    const btn = screen.getByRole("button", {
+    const { getByRole } = render(<SelectclientLayout clients={clients} />);
+    const btn = getByRole("button", {
       name: /criar cliente/i
     });
     await userEvent.click(btn);
-    const inputNumberDocument = screen.getByRole("textbox", {
+    const inputNumberDocument = getByRole("textbox", {
       name: /número documento/i
     });
     await userEvent.keyboard("{Escape}");

@@ -1,11 +1,11 @@
 import Loading from "@/components/loading";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 
 describe("Tests to loading component", () => {
   it("should render loading component", () => {
-    render(<Loading />);
+    const { getByTestId } = render(<Loading />);
 
-    const componentLoading = screen.getByTestId("loading");
+    const componentLoading = getByTestId("loading");
 
     expect(componentLoading).toBeInTheDocument();
   });

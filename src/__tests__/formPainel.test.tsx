@@ -15,6 +15,7 @@ describe("form painel", () => {
     cidade: "São Paulo",
     uf: "SP"
   };
+
   const conductor = {
     id: 1,
     nome: "John Doe",
@@ -22,6 +23,7 @@ describe("form painel", () => {
     catergoriaHabilitacao: "A",
     vencimentoHabilitacao: "2023-06-23T12:58:00"
   };
+
   it("should render form painel to client", () => {
     const TestInput = () => {
       const methods = useForm();

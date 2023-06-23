@@ -10,6 +10,7 @@ import userEvent from "@testing-library/user-event";
 
 describe("test card car component", () => {
   const deleteFunc = jest.fn();
+
   const car = {
     id: 1,
     placa: "ABC-1234",
@@ -17,6 +18,7 @@ describe("test card car component", () => {
     anoFabricacao: 2018,
     kmAtual: 50000
   };
+
   it("should render card car component", () => {
     const { getByText } = render(<CardCar deleteCar={deleteFunc} car={car} />);
     const marca = getByText(/Toyota Corolla/i);
