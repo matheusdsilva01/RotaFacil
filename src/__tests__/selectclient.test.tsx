@@ -3,8 +3,6 @@ import SelectclientLayout from "@/layouts/selectclient.layout";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-jest.mock("next/navigation");
-
 jest.mock("@/api", () => ({
   api: {
     delete: jest.fn()

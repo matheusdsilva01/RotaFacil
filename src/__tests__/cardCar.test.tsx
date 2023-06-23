@@ -7,8 +7,6 @@ import {
   waitForElementToBeRemoved
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-jest.mock("next/router", () => require("next-router-mock"));
-jest.mock("next/navigation", () => require("next-router-mock"));
 
 describe("test card car component", () => {
   const deleteFunc = jest.fn();
