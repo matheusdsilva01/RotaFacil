@@ -74,7 +74,12 @@ const SelectclientLayout = ({ clients }: selectClientLayoutProps) => {
   return (
     <Container
       maxWidth="xl"
-      sx={{ minHeight: "calc(100vh - 100px)", boxShadow: 1, py: 2 }}
+      sx={{
+        minHeight: "calc(100vh - 100px)",
+        boxShadow: 1,
+        py: 2,
+        overflow: "auto"
+      }}
     >
       {clients.length > 0 ? (
         <>

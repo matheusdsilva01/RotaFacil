@@ -80,7 +80,12 @@ const SelectconductorLayout = ({ conductors }: selectConductorLayoutProps) => {
   return (
     <Container
       maxWidth="xl"
-      sx={{ height: "calc(100vh - 100px)", boxShadow: 1, mt: 4 }}
+      sx={{
+        minHeight: "calc(100vh - 100px)",
+        boxShadow: 1,
+        mt: 4,
+        overflow: "auto"
+      }}
     >
       {conductors.length > 0 ? (
         <>

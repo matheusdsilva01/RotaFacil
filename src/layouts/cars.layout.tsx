@@ -62,7 +62,8 @@ const CarsLayout = ({ cars }: CarsLayoutProps) => {
       sx={{
         minHeight: "calc(100vh - 100px)",
         boxShadow: 1,
-        py: 2
+        py: 2,
+        overflow: "auto"
       }}
     >
       {cars.length > 0 ? (

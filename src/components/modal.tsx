@@ -36,7 +36,7 @@ const Modal = ({ modalState, closeModal, onSubmit, children }: ModalProps) => {
           [theme.breakpoints.down(801)]: {
             gridTemplateColumns: "repeat(auto-fit, 1fr)",
             maxHeight: "100vh",
-            paddingY: "25px"
+            padding: "10px 0"
           }
         })}
       >
@@ -62,7 +62,7 @@ const Modal = ({ modalState, closeModal, onSubmit, children }: ModalProps) => {
         <Button
           type="submit"
           variant="contained"
-          sx={{ maxWidth: "250px", m: "0 auto" }}
+          sx={{ maxWidth: "250px", m: "0 auto", mt: 2 }}
         >
           Criar
         </Button>
