@@ -51,7 +51,8 @@ A página será recarregada se você fizer edições em nível de codigo.
 ## Testes
 Cobertura de teste no momento
 
-![image](https://github.com/matheusdsilva01/RotaFacil/assets/85570707/46c54632-8a9e-4425-abb6-09bc159108fa)
+![image](https://github.com/matheusdsilva01/RotaFacil/assets/85570707/4af79722-b1c7-46a2-b19d-dd41b2e9c16a)
+
 
 ## Sobre mim
 
